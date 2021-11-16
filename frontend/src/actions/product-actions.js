@@ -2,6 +2,7 @@ import { productListActions } from "../reducers/productListSlice.js";
 import { productDetailsActions } from "../reducers/productDetailsSlice.js";
 import axios from "axios";
 
+//Products related actions creator Thunk
 export const listProducts = () => {
   return async (dispatch) => {
     try {
