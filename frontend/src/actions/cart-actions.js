@@ -34,3 +34,18 @@ export const removeFromCart = (id) => {
     );
   };
 };
+
+export const saveShippingAddress = (data) => {
+  return (dispatch) => {
+    dispatch(cartActions.cartSaveShippingAddress(data));
+
+    localStorage.setItem("shippingAddress", JSON.stringify(data));
+  };
+};
+
+export const savePaymentMethod = (data) => {
+  return (dispatch) => {
+    dispatch(cartActions.cartSavePaymentMethod(data));
+    localStorage.setItem("paymentMethod", JSON.stringify(data));
+  };
+};
