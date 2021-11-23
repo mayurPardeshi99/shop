@@ -15,6 +15,9 @@ const userDetailsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    userDetailsReset: (state) => {
+      state.user = {};
+    },
   },
 });
 

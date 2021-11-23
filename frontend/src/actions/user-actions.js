@@ -3,6 +3,7 @@ import { userLoginReducerActions } from "../reducers/userLoginSlice";
 import { userRegisterReducerActions } from "../reducers/userRegisterSlice";
 import { userDetailsReducerActions } from "../reducers/userDetailsSlice";
 import { userUpdateProfileReducerActions } from "../reducers/userUpdateSlice";
+import { userOrdersListActions } from "../reducers/orderSlice";
 
 export const login = (email, password) => {
   return async (dispatch) => {
@@ -36,6 +37,8 @@ export const logout = () => {
   return (dispatch) => {
     dispatch(userLoginReducerActions.userLogout());
     localStorage.removeItem("userInfo");
+    dispatch(userDetailsReducerActions.userDetailsReset());
+    dispatch(userOrdersListActions.userOrdersListReset());
   };
 };
 
