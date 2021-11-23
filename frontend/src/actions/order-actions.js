@@ -5,6 +5,7 @@ import {
   orderPayActions,
   userOrdersListActions,
 } from "../reducers/orderSlice";
+import { cartActions } from "../reducers/cartSlice";
 
 export const placeOrder = (order) => {
   return async (dispatch, getState) => {
@@ -23,6 +24,9 @@ export const placeOrder = (order) => {
 
       const { data } = await axios.post("/api/orders", order, config);
       dispatch(createOrderActions.createOrderSuccess(data));
+      dispatch(cartActions.cartReset());
+      localStorage.removeItem("cartItems");
+      dispatch(getUserOrdersList());
     } catch (error) {
       const errorMessage =
         error.response && error.response.data.message
@@ -85,6 +89,7 @@ export const payOrder = (orderId, paymentResult) => {
       );
       console.log(data);
       dispatch(orderPayActions.orderPaySuccess());
+      dispatch(getUserOrdersList());
     } catch (error) {
       const errorMessage =
         error.response && error.response.data.message

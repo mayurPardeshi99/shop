@@ -39,6 +39,9 @@ const cartSlice = createSlice({
     cartSavePaymentMethod: (state, action) => {
       state.paymentMethod = action.payload;
     },
+    cartReset: (state) => {
+      state.cartItems = [];
+    },
   },
 });
 

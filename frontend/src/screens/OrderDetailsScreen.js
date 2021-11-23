@@ -34,7 +34,7 @@ const OrderDetailsScreen = () => {
       document.body.appendChild(script);
     };
 
-    if (order.orderItems.length === 0 || successPay) {
+    if (order.orderItems.length === 0 || successPay || order._id !== id) {
       dispatch(orderPayActions.orderPayReset());
       dispatch(getOrderDetails(id));
     } else if (!order.isPaid) {
