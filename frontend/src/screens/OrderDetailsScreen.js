@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row, ListGroup, Card, Image } from "react-bootstrap";
+import { Col, Row, ListGroup, Card, Image, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { getOrderDetails, payOrder } from "../actions/order-actions";
-import { orderPayActions } from "../reducers/orderSlice";
+import {
+  getOrderDetails,
+  payOrder,
+  deliverOrder,
+} from "../actions/order-actions";
+import { orderPayActions, orderDeliverActions } from "../reducers/orderSlice";
 import { PayPalButton } from "react-paypal-button-v2";
 import axios from "axios";
 
@@ -21,6 +25,12 @@ const OrderDetailsScreen = () => {
   const orderPay = useSelector((state) => state.orderPay.payment);
   const { loading: loadingPay, success: successPay } = orderPay;
 
+  const orderDeliver = useSelector((state) => state.orderDeliver.deliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   useEffect(() => {
     const addPayPalScript = async () => {
       const { data } = await axios.get("/api/config/pay");
@@ -34,8 +44,14 @@ const OrderDetailsScreen = () => {
       document.body.appendChild(script);
     };
 
-    if (order.orderItems.length === 0 || successPay || order._id !== id) {
+    if (
+      order.orderItems.length === 0 ||
+      successPay ||
+      successDeliver ||
+      order._id !== id
+    ) {
       dispatch(orderPayActions.orderPayReset());
+      dispatch(orderDeliverActions.orderDeliverReset());
       dispatch(getOrderDetails(id));
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -44,10 +60,14 @@ const OrderDetailsScreen = () => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, id, successPay, order]);
+  }, [dispatch, id, successPay, successDeliver, order]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(id, paymentResult));
+  };
+
+  const deliverOrderHandler = () => {
+    dispatch(deliverOrder(id));
   };
 
   return (
@@ -171,21 +191,36 @@ const OrderDetailsScreen = () => {
                       <Message variant="danger">{error}</Message>
                     </ListGroup.Item>
                   )}
-                  {!order.isPaid && (
-                    <ListGroup.Item>
-                      {loadingPay && <Loader />}
-                      {!sdkReady ? (
-                        <Loader />
-                      ) : (
-                        <div className="d-grid gap-2">
-                          <PayPalButton
-                            amount={order.totalPrice}
-                            onSuccess={successPaymentHandler}
-                          />
-                        </div>
-                      )}
-                    </ListGroup.Item>
-                  )}
+                  {userInfo &&
+                    !order.isPaid &&
+                    order.user._id === userInfo._id && (
+                      <ListGroup.Item>
+                        {loadingPay && <Loader />}
+                        {!sdkReady ? (
+                          <Loader />
+                        ) : (
+                          <div className="d-grid gap-2">
+                            <PayPalButton
+                              amount={order.totalPrice}
+                              onSuccess={successPaymentHandler}
+                            />
+                          </div>
+                        )}
+                      </ListGroup.Item>
+                    )}
+                  {loadingDeliver && <Loader />}
+                  {userInfo &&
+                    userInfo.isAdmin &&
+                    order.isPaid &&
+                    !order.isDelivered && (
+                      <Button
+                        onClick={deliverOrderHandler}
+                        className="btn btn-dark"
+                        type="button"
+                      >
+                        Mark As Delivered
+                      </Button>
+                    )}
                 </ListGroup>
               </Card>
             </Col>

@@ -11,15 +11,23 @@ import {
   orderDetailsReducer,
   orderPayReducer,
   userOrdersListReducer,
+  orderListReducer,
+  orderDeliverReducer,
 } from "./reducers/orderSlice";
 import usersListReducer from "./reducers/usersListSlice";
 import userDeleteReducer from "./reducers/userDeleteSlice";
 import updateUserReducer from "./reducers/updateUserSlice";
+import productDeleteReducer from "./reducers/productDeleteSlice";
+import productCreateReducer from "./reducers/productCreateSlice";
+import productUpdateReducer from "./reducers/productUpdateSlice";
 
 const store = configureStore({
   reducer: {
     productList: productListReducer,
     productDetails: productDetailsReducer,
+    productDelete: productDeleteReducer,
+    productCreate: productCreateReducer,
+    productUpdate: productUpdateReducer,
     cart: cartReducer,
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,
@@ -32,6 +40,8 @@ const store = configureStore({
     createOrder: createOrderReducer,
     orderDetails: orderDetailsReducer,
     orderPay: orderPayReducer,
+    orderDeliver: orderDeliverReducer,
+    orderList: orderListReducer,
   },
 });
 

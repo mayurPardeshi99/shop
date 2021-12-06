@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import uploadsRoutes from "./routes/uploadsRoutes.js";
 import { notFoundHandler, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
@@ -24,6 +25,8 @@ app.use("/api/orders", orderRoutes);
 app.get("/api/config/pay", (req, res) =>
   res.send(process.env.PAYPAL_CLIENT_ID)
 );
+
+app.use("/api/upload", uploadsRoutes);
 
 app.use(notFoundHandler);
 

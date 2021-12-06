@@ -4,6 +4,8 @@ import {
   orderDetailsActions,
   orderPayActions,
   userOrdersListActions,
+  orderListActions,
+  orderDeliverActions,
 } from "../reducers/orderSlice";
 import { cartActions } from "../reducers/cartSlice";
 
@@ -82,12 +84,7 @@ export const payOrder = (orderId, paymentResult) => {
         },
       };
 
-      const { data } = await axios.put(
-        `/api/orders/${orderId}/pay`,
-        paymentResult,
-        config
-      );
-      console.log(data);
+      await axios.put(`/api/orders/${orderId}/pay`, paymentResult, config);
       dispatch(orderPayActions.orderPaySuccess());
       dispatch(getUserOrdersList());
     } catch (error) {
@@ -97,6 +94,35 @@ export const payOrder = (orderId, paymentResult) => {
           : error.message;
 
       dispatch(orderPayActions.orderPayFail(errorMessage));
+    }
+  };
+};
+
+export const deliverOrder = (orderId) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(orderDeliverActions.orderDeliverRequest());
+
+      const userLogin = getState().userLogin;
+      const { userInfo } = userLogin;
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      await axios.put(`/api/orders/${orderId}/deliver`, {}, config);
+      dispatch(orderDeliverActions.orderDeliverSuccess());
+      dispatch(getUserOrdersList());
+    } catch (error) {
+      const errorMessage =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      dispatch(orderDeliverActions.orderDeliverFail(errorMessage));
     }
   };
 };
@@ -125,6 +151,34 @@ export const getUserOrdersList = () => {
           : error.message;
 
       dispatch(userOrdersListActions.userOrdersListFail(errorMessage));
+    }
+  };
+};
+
+export const getOrderList = () => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(orderListActions.orderListRequest());
+
+      const userLogin = getState().userLogin;
+      const { userInfo } = userLogin;
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      const { data } = await axios.get("/api/orders", config);
+      dispatch(orderListActions.orderListSuccess(data));
+    } catch (error) {
+      const errorMessage =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      dispatch(orderListActions.orderListFail(errorMessage));
     }
   };
 };

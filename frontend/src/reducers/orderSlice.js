@@ -70,6 +70,31 @@ export const orderPayActions = orderPaySlice.actions;
 
 export const orderPayReducer = orderPaySlice.reducer;
 
+const orderDeliverSlice = createSlice({
+  name: "orderDeliver",
+  initialState: { deliver: {} },
+  reducers: {
+    orderDeliverRequest: (state) => {
+      state.deliver.loading = true;
+    },
+    orderDeliverSuccess: (state) => {
+      state.deliver.loading = false;
+      state.deliver.success = true;
+    },
+    orderDeliverFail: (state, action) => {
+      state.deliver.loading = false;
+      state.deliver.error = action.payload;
+    },
+    orderDeliverReset: (state) => {
+      state.deliver = {};
+    },
+  },
+});
+
+export const orderDeliverActions = orderDeliverSlice.actions;
+
+export const orderDeliverReducer = orderDeliverSlice.reducer;
+
 const userOrdersListSlice = createSlice({
   name: "userOrdersList",
   initialState: { orders: [] },
@@ -94,3 +119,27 @@ const userOrdersListSlice = createSlice({
 export const userOrdersListActions = userOrdersListSlice.actions;
 
 export const userOrdersListReducer = userOrdersListSlice.reducer;
+
+const initialOrderListState = { orders: [] };
+
+const orderListSlice = createSlice({
+  name: "orderList",
+  initialState: initialOrderListState,
+  reducers: {
+    orderListRequest: (state) => {
+      state.loading = true;
+    },
+    orderListSuccess: (state, action) => {
+      state.loading = false;
+      state.orders = action.payload;
+    },
+    orderListFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+  },
+});
+
+export const orderListActions = orderListSlice.actions;
+
+export const orderListReducer = orderListSlice.reducer;
