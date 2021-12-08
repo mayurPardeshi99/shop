@@ -89,7 +89,7 @@ const ProductsListScreen = () => {
               <tr key={product._id}>
                 <td>{product._id}</td>
                 <td>{product.name}</td>
-                <td>₹ {product.price}</td>
+                <td>$ {product.price}</td>
                 <td>{product.category}</td>
                 <td>{product.brand}</td>
                 <td>

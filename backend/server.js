@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import uploadsRoutes from "./routes/uploadsRoutes.js";
 import { notFoundHandler, errorHandler } from "./middleware/errorMiddleware.js";
+import path from "path";
 
 dotenv.config();
 connectDB();
@@ -13,10 +14,6 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res.send("Api running");
-});
 
 app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
@@ -27,6 +24,19 @@ app.get("/api/config/pay", (req, res) =>
 );
 
 app.use("/api/upload", uploadsRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  const __dirname = path.resolve();
+  app.use(express.static(path.join(__dirname, "/frontend/build")));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+  });
+} else {
+  app.get("/", (req, res) => {
+    res.send("Api running");
+  });
+}
 
 app.use(notFoundHandler);
 

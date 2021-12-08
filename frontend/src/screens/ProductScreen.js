@@ -92,7 +92,7 @@ const ProductScreen = () => {
                     text={`${product.numReviews} reviews`}
                   />
                 </ListGroup.Item>
-                <ListGroup.Item>Price: ₹ {product.price}</ListGroup.Item>
+                <ListGroup.Item>Price: $ {product.price}</ListGroup.Item>
                 <ListGroup.Item>
                   Description: {product.description}
                 </ListGroup.Item>
@@ -101,7 +101,7 @@ const ProductScreen = () => {
             <Col md={3}>
               <Card>
                 <ListGroup variant="flush">
-                  <ListGroup.Item>Price: ₹ {product.price}</ListGroup.Item>
+                  <ListGroup.Item>Price: $ {product.price}</ListGroup.Item>
                   <ListGroup.Item>
                     Status:{" "}
                     {product.countInStock > 0 ? "In Stock" : "Out Of Stock"}

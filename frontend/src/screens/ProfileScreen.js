@@ -54,6 +54,8 @@ const ProfileScreen = () => {
       setMessage("Password do not match.");
     } else {
       dispatch(updateUserProfile({ id: user._id, name, email, password }));
+      setPassword("");
+      setConfirmPassword("");
     }
   };
 
@@ -132,7 +134,7 @@ const ProfileScreen = () => {
                 <tr key={order._id}>
                   <th>{order._id}</th>
                   <th>{order.createdAt.substring(0, 10)}</th>
-                  <th>₹ {order.totalPrice}</th>
+                  <th>$ {order.totalPrice}</th>
                   <th>
                     {order.isPaid ? (
                       order.paidAt.substring(0, 10)
