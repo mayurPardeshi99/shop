@@ -20,6 +20,8 @@ import updateUserReducer from "./reducers/updateUserSlice";
 import productDeleteReducer from "./reducers/productDeleteSlice";
 import productCreateReducer from "./reducers/productCreateSlice";
 import productUpdateReducer from "./reducers/productUpdateSlice";
+import productReviewCreateReducer from "./reducers/productReviewCreateSlice";
+import productTopRatedReducer from "./reducers/productTopRatedSlice";
 
 const store = configureStore({
   reducer: {
@@ -28,6 +30,8 @@ const store = configureStore({
     productDelete: productDeleteReducer,
     productCreate: productCreateReducer,
     productUpdate: productUpdateReducer,
+    productReviewCreate: productReviewCreateReducer,
+    productTopRated: productTopRatedReducer,
     cart: cartReducer,
     userLogin: userLoginReducer,
     userRegister: userRegisterReducer,

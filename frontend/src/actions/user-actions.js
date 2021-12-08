@@ -121,6 +121,8 @@ export const updateUserProfile = (user) => {
       };
       const { data } = await axios.put("/api/users/profile", user, config);
       dispatch(userUpdateProfileReducerActions.userUpdateProfileSuccess(data));
+      dispatch(userLoginReducerActions.userLoginSuccess(data));
+      localStorage.setItem("userInfo", JSON.stringify(data));
     } catch (error) {
       const errorMessage =
         error.response && error.response.data.message

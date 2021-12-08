@@ -3,14 +3,16 @@ import { productDetailsActions } from "../reducers/productDetailsSlice";
 import { productDeleteReducerActions } from "../reducers/productDeleteSlice";
 import { productCreateReducerActions } from "../reducers/productCreateSlice";
 import { productUpdateReducerActions } from "../reducers/productUpdateSlice";
+import { productReviewCreateReducerActions } from "../reducers/productReviewCreateSlice";
+import { productTopRatedReducerActions } from "../reducers/productTopRatedSlice";
 import axios from "axios";
 
 //Products related actions creator Thunk
-export const listProducts = () => {
+export const listProducts = (keyword = "") => {
   return async (dispatch) => {
     try {
       dispatch(productListActions.productListRequest());
-      const { data } = await axios.get("/api/products");
+      const { data } = await axios.get(`/api/products?keyword=${keyword}`);
       dispatch(productListActions.productListSuccess(data));
     } catch (error) {
       const errorMessage =
@@ -19,6 +21,23 @@ export const listProducts = () => {
           : error.message;
 
       dispatch(productListActions.productListFail(errorMessage));
+    }
+  };
+};
+
+export const listTopProducts = () => {
+  return async (dispatch) => {
+    try {
+      dispatch(productTopRatedReducerActions.productTopRatedRequest());
+      const { data } = await axios.get("/api/products/top");
+      dispatch(productTopRatedReducerActions.productTopRatedSuccess(data));
+    } catch (error) {
+      const errorMessage =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      dispatch(productTopRatedReducerActions.productTopRatedFail(errorMessage));
     }
   };
 };
@@ -123,6 +142,35 @@ export const updateProduct = (product) => {
           : error.message;
 
       dispatch(productUpdateReducerActions.productUpdateFail(errorMessage));
+    }
+  };
+};
+
+export const createProductReview = (productId, review) => {
+  return async (dispatch, getState) => {
+    try {
+      dispatch(productReviewCreateReducerActions.productReviewCreateRequest());
+
+      const userLogin = getState().userLogin;
+      const { userInfo } = userLogin;
+
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+      await axios.post(`/api/products/${productId}/review`, review, config);
+      dispatch(productReviewCreateReducerActions.productReviewCreateSuccess());
+    } catch (error) {
+      const errorMessage =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+
+      dispatch(
+        productReviewCreateReducerActions.productReviewCreateFail(errorMessage)
+      );
     }
   };
 };

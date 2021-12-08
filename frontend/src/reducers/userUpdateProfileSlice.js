@@ -2,19 +2,22 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const userUpdateProfileSlice = createSlice({
   name: "userUpdateProfile",
-  initialState: {},
+  initialState: { updateUserState: {} },
   reducers: {
     userUpdateProfileRequest: (state) => {
-      state.loading = true;
+      state.updateUserState.loading = true;
     },
     userUpdateProfileSuccess: (state, action) => {
-      state.loading = false;
-      state.success = true;
-      state.userInfo = action.payload;
+      state.updateUserState.loading = false;
+      state.updateUserState.success = true;
+      state.updateUserState.userInfo = action.payload;
     },
     userUpdateProfileFail: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+      state.updateUserState.loading = false;
+      state.updateUserState.error = action.payload;
+    },
+    userUpdateProfileReset: (state) => {
+      state.updateUserState = {};
     },
   },
 });
